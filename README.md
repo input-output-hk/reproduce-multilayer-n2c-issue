@@ -1,4 +1,4 @@
-# Reproduce
+# Reproduces
 
 ```console
 ❯ nix run .\#image.copyToDockerDaemon
@@ -38,3 +38,22 @@ Copying blob 6ac923c37e3e done
 Copying blob 038634c7a43f done
 FATA[0002] writing blob: writing to temporary on-disk layer: happened during read: Digest did not match, expected sha256:6ac923c37e3eb31809119147cc9dfd384f78f999eddea5ccb43f7d7d0a5db320, got sha256:1c0737b3c16c1cb3b4e949c3deb08fb3d813b98eb53f7eb722df3a110fa231f7
 ```
+
+
+For more detail, run: `nix run .\#image.copyToDockerDaemon -- --debug`
+
+# Mismatch is consistent
+
+```console
+expected sha256:6ac923c37e3eb31809119147cc9dfd384f78f999eddea5ccb43f7d7d0a5db320,
+got      sha256:1c0737b3c16c1cb3b4e949c3deb08fb3d813b98eb53f7eb722df3a110fa231f7
+```
+
+Running with `--debug` shows that `6ac923...` corresponds to the `package`:
+```
+DEBU[0001] Checking if we can reuse blob sha256:6ac923c37e3eb31809119147cc9dfd384f78f999eddea5ccb43f7d7d0a5db320: general substitution = true, compression for MIME type "application/vnd.oci.image.layer.v1.tar" = true
+DEBU[0001] Walking filesystem: /nix/store/910j1q2lkjm91fyz63d65cd2g51nlfs0-metadata-sync-exe-metadata-sync-0.4.0.0
+DEBU[0001] Walking filesystem: /nix/store/910j1q2lkjm91fyz63d65cd2g51nlfs0-metadata-sync-exe-metadata-sync-0.4.0.0/bin
+DEBU[0001] Walking filesystem: /nix/store/910j1q2lkjm91fyz63d65cd2g51nlfs0-metadata-sync-exe-metadata-sync-0.4.0.0/bin/metadata-sCopying blob 97cdc8904388 done
+```
+
